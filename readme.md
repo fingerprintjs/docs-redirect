@@ -37,10 +37,14 @@ Add automatic certificate renewal to the cron tasks. Run:
 sudo crontab -e
 ```
 
-Add a line (leave a blank line at the end):
+Add the following lines (leave a blank line at the end):
 
 ```
-25 2 * * * /usr/bin/certbot renew --quiet
+# Makes "certbot" and "nginx" be available for execution to avoid https://community.letsencrypt.org/t/102696
+PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin
+
+# The schedule
+25 2 * * * certbot renew --quiet
 ```
 
 Save and quit the editor.
