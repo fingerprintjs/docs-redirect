@@ -20,35 +20,35 @@ function getRedirectTarget(path, query) {
   // Redirect subversions to the main version
   var match = /^\/pro\/v\/[^\/]*(\/.*)?$/.exec(path)
   if (match) {
-    return '/pro' + match[1] + queryToString(query)
+    path = '/pro' + (match[1] || '')
   }
 
   // Initial page
   match = /^\/pro\/?$/.exec(path)
   if (match) {
-    return 'https://dev.fingerprintjs.com/v2/docs/introduction' + queryToString(query)
+    return 'https://dev.fingerprintjs.com/docs/introduction' + queryToString(query)
   }
 
-  // Best practices, integrations and legal articles
-  match = /^\/pro\/(best-practices|integrations|legal)\/([^\/]+)\/?$/.exec(path)
+  // JS agent guides
+  match = /^\/pro\/js-agent\/(npm|cdn)\/?$/.exec(path)
   if (match) {
-    return 'https://dev.fingerprintjs.com/v2/docs/' + match[2] + queryToString(query)
+    return 'https://dev.fingerprintjs.com/docs/js-agent' + queryToString(query)
   }
 
   // Other 2nd level articles
-  match = /^\/pro\/([^\/]+)\/([^\/]+)\/?$/.exec(path)
+  match = /^\/pro\/[^\/]*\/([^\/]+)\/?$/.exec(path)
   if (match) {
-    return 'https://dev.fingerprintjs.com/v2/docs/' + match[1] + '-' + match[2] + queryToString(query)
+    return 'https://dev.fingerprintjs.com/docs/' + match[1] + queryToString(query)
   }
 
   // Other /pro pages, including root-level articles
   match = /^\/pro\/(.*)?$/.exec(path)
   if (match) {
-    return 'https://dev.fingerprintjs.com/v2/docs/' + match[1] + queryToString(query)
+    return 'https://dev.fingerprintjs.com/docs/' + match[1] + queryToString(query)
   }
 
   // Other
-  return 'https://dev.fingerprintjs.com/v2' + path + queryToString(query)
+  return 'https://dev.fingerprintjs.com' + path + queryToString(query)
 }
 
 function queryToString(query) {
