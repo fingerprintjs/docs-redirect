@@ -1,58 +1,31 @@
 # Documentation redirect
 
-The [nginx.conf](nginx.conf) file is Nginx configuration to redirect URLs from [docs.fingerprintjs.com](https://docs.fingerprintjs.com) to the new address: [dev.fingerprintjs.com/v2](https://dev.fingerprintjs.com).
-
-The [nginx.original.conf](nginx.original.conf) file is the initial Nginx configuration.
+The [cloudFront_function.js](cloudFront_function.js) file is a CloudFront function to redirect URLs from [docs.fingerprintjs.com](https://docs.fingerprintjs.com)
+to the new address: [dev.fingerprintjs.com/v2](https://dev.fingerprintjs.com).
 
 ## How to deploy
 
-Replace the `/etc/nginx/nginx.conf` file content on the server with the content of [nginx.conf](nginx.conf) from this repository manually.
-Then run the following command on the server:
+### Initial setup
 
-```bash
-sudo service nginx reload
-```
+Go to the AWS console, to [S3 management](https://s3.console.aws.amazon.com/s3/home).
+Create an empty public bucket.
 
-## How to make a redirect server from scratch
+Go to [CloudFront functions management](https://console.aws.amazon.com/cloudfront/v3/home?#/functions).
+Create a new function, type `Redirects from the old documentation to the new one` in the "Description" field.
+Paste the function code from [cloudFront_function.js](cloudFront_function.js), click "Save changes".
+Open the "Publish" tab and publish the function.
 
-Make an AWS EC2 Linux instance, the cheapest one will be fine, e.g. `t3a.nano`.
+Go to [CloudFront management](https://console.aws.amazon.com/cloudfront/v3/home).
+Create a new distribution. Leave everything default except:
 
-Connect to it via SSH, install Nginx and Certbot using the following commands:
+- Choose the empty S3 bucket as the origin domain
+- Type `docs.fingerprintjs.com` in the "Alternate domain name" field
+- Create (if not created) and choose an SSL certificate for the domain in the "Custom SSL certificate" field
+- Choose the CloudFront function created earlier in the "Viewer request" field
+- Type `Redirects from the old documentation to the new one` in the "Description" field
 
-```bash
-# Nginx
-sudo amazon-linux-extras install nginx1
-sudo service nginx start
+### Function code update
 
-# Certbot
-cd /tmp
-wget -O epel.rpm –nv https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
-sudo yum install -y ./epel.rpm
-sudo yum install certbot python2-certbot-nginx.noarch
-```
-
-Add automatic certificate renewal to the cron tasks. Run:
-
-```bash
-sudo crontab -e
-```
-
-Add the following lines (leave a blank line at the end):
-
-```
-# Makes "certbot" and "nginx" be available for execution to avoid https://community.letsencrypt.org/t/102696
-PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin
-
-# The schedule
-25 2 * * * certbot renew --quiet
-```
-
-Save and quit the editor.
-
-To obtain an SSL certificate, setup the domain DNS to point to the server, wait for the DNS records to get applied, then run:
-
-```bash
-sudo certbot certonly --nginx -d docs.fingerprintjs.com
-```
-
-Then [deploy the Nginx configuration](#how-to-deploy).
+1. Go to [CloudFront functions management](https://console.aws.amazon.com/cloudfront/v3/home?#/functions). Open the function.
+2. Paste the function code from [cloudFront_function.js](cloudFront_function.js), click "Save changes".
+3. Open the "Publish" tab and publish the function.
