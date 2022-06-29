@@ -1,7 +1,7 @@
 # Documentation redirect
 
 The [cloudFront_function.js](cloudFront_function.js) file is a CloudFront function to redirect URLs from [docs.fingerprintjs.com](https://docs.fingerprintjs.com)
-to the new address: [dev.fingerprintjs.com](https://dev.fingerprintjs.com).
+to the new address: [dev.fingerprint.com](https://dev.fingerprint.com).
 
 ## How to deploy
 

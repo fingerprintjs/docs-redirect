@@ -26,29 +26,29 @@ function getRedirectTarget(path, query) {
   // Initial page
   match = /^\/pro\/?$/.exec(path)
   if (match) {
-    return 'https://dev.fingerprintjs.com/docs/introduction' + queryToString(query)
+    return 'https://dev.fingerprint.com/docs/introduction' + queryToString(query)
   }
 
   // JS agent guides
   match = /^\/pro\/js-agent\/(npm|cdn)\/?$/.exec(path)
   if (match) {
-    return 'https://dev.fingerprintjs.com/docs/js-agent' + queryToString(query)
+    return 'https://dev.fingerprint.com/docs/js-agent' + queryToString(query)
   }
 
   // Other 2nd level articles
   match = /^\/pro\/[^\/]*\/([^\/]+)\/?$/.exec(path)
   if (match) {
-    return 'https://dev.fingerprintjs.com/docs/' + match[1] + queryToString(query)
+    return 'https://dev.fingerprint.com/docs/' + match[1] + queryToString(query)
   }
 
   // Other /pro pages, including root-level articles
   match = /^\/pro\/(.*)?$/.exec(path)
   if (match) {
-    return 'https://dev.fingerprintjs.com/docs/' + match[1] + queryToString(query)
+    return 'https://dev.fingerprint.com/docs/' + match[1] + queryToString(query)
   }
 
   // Other
-  return 'https://dev.fingerprintjs.com' + path + queryToString(query)
+  return 'https://dev.fingerprint.com' + path + queryToString(query)
 }
 
 function queryToString(query) {
